@@ -3,10 +3,9 @@ import { Battle } from "./class/Battle";
 import { Card } from "./class/Card";
 import { log, setLog } from "./class/Logger";
 import { Player } from "./class/Player";
+import { NB_GAME, NB_GENERATION } from "./Params";
 import "./style.css";
 
-const NB_GAME = 1000;
-const NB_GENERATION = 1000;
 setLog(false);
 
 let result = document.getElementById("result") as HTMLDivElement;
@@ -69,14 +68,17 @@ async function startGeneration() {
     nbTour.push(nbTourParty.reduce((a, b) => a + b) / NB_GAME);
 
     if (nbVictoryJ1 / NB_GAME > lastWinRate) {
-      console.log("Winrate: " + nbVictoryJ1 / NB_GAME + ">" + lastWinRate);
-      console.log("Keep");
+      console.log(
+        "🟩 Keep | Winrate: " + nbVictoryJ1 / NB_GAME + ">" + lastWinRate
+      );
 
       lastWinRate = nbVictoryJ1 / NB_GAME;
       lastDeck = [...j1.deck];
     } else {
-      console.log("Winrate: " + nbVictoryJ1 / NB_GAME + "<" + lastWinRate);
-      console.log("Rollback");
+      console.log(
+        "❌ Rollback | Winrate: " + nbVictoryJ1 / NB_GAME + "<" + lastWinRate
+      );
+
       j1.deck = [...lastDeck];
     }
   }

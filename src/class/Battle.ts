@@ -1,3 +1,4 @@
+import { SECOND_PLAYER_MORE_CARD } from "../Params";
 import { log } from "./Logger";
 import { Player } from "./Player";
 
@@ -28,6 +29,10 @@ export class Battle {
       let startPlayer = Math.floor(Math.random() * 2) + 1;
       let currentPlayer = startPlayer === 1 ? this.player1 : this.player2;
       let otherPlayer = startPlayer === 1 ? this.player2 : this.player1;
+
+      if (SECOND_PLAYER_MORE_CARD) {
+        otherPlayer.draw();
+      }
 
       let nbTour = 0;
 
