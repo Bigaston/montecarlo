@@ -40,14 +40,7 @@ async function startGeneration() {
     console.log("=== Generation" + generation + " ===");
 
     // Change Deck
-    j1.deck.splice(Math.floor(Math.random() * j1.deck.length), 1);
-
-    let availableCard = Card.allCards.filter((c) => !j1.deck.includes(c));
-
-    let addedCard =
-      availableCard[Math.floor(Math.random() * availableCard.length)];
-
-    j1.deck.push(addedCard);
+    j1.replaceDeck();
 
     nbVictoryJ1 = 0;
     nbTourParty = [];

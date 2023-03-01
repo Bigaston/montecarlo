@@ -137,4 +137,15 @@ export class Player implements IDamageable {
 
     return cardDiffer;
   }
+
+  public replaceDeck() {
+    this.deck.splice(Math.floor(Math.random() * this.deck.length), 1);
+
+    let availableCard = Card.allCards.filter((c) => !this.deck.includes(c));
+
+    let addedCard =
+      availableCard[Math.floor(Math.random() * availableCard.length)];
+
+    this.deck.push(addedCard);
+  }
 }
