@@ -6,7 +6,7 @@ import { Player } from "./class/Player";
 import "./style.css";
 
 const NB_GAME = 1000;
-const NB_GENERATION = 100;
+const NB_GENERATION = 1000;
 setLog(false);
 
 let result = document.getElementById("result") as HTMLDivElement;
@@ -24,7 +24,6 @@ async function startGeneration() {
   console.log(j1.deckDiffer(j2.deck));
 
   generatePlot(j1.deck, "P1 Deck");
-  generatePlot(j2.deck, "P2 Deck");
 
   log(j1);
   log(j2);
@@ -34,11 +33,21 @@ async function startGeneration() {
   let nbTour = [];
 
   let lastWinRate = 0;
-  let lastj1 = j1.copy();
+  let lastDeck: Card[] = [];
   let firstj1 = j1.copy();
 
   for (let generation = 0; generation < NB_GENERATION; generation++) {
     console.log("=== Generation" + generation + " ===");
+
+    // Change Deck
+    j1.deck.splice(Math.floor(Math.random() * j1.deck.length), 1);
+
+    let availableCard = Card.allCards.filter((c) => !j1.deck.includes(c));
+
+    let addedCard =
+      availableCard[Math.floor(Math.random() * availableCard.length)];
+
+    j1.deck.push(addedCard);
 
     nbVictoryJ1 = 0;
     nbTourParty = [];
@@ -69,26 +78,14 @@ async function startGeneration() {
 
     if (nbVictoryJ1 / NB_GAME > lastWinRate) {
       console.log("Winrate: " + nbVictoryJ1 / NB_GAME + ">" + lastWinRate);
-      console.log("Progress");
+      console.log("Keep");
 
       lastWinRate = nbVictoryJ1 / NB_GAME;
-      lastj1 = j1.copy();
-
-      j1.deck.splice(Math.floor(Math.random() * j1.deck.length), 1);
-
-      let availableCard = Card.allCards.filter((c) => !j1.deck.includes(c));
-
-      let addedCard =
-        availableCard[Math.floor(Math.random() * availableCard.length)];
-
-      console.log(addedCard);
-
-      j1.deck.push(addedCard);
-      console.log(j1.deck);
+      lastDeck = [...j1.deck];
     } else {
       console.log("Winrate: " + nbVictoryJ1 / NB_GAME + "<" + lastWinRate);
       console.log("Rollback");
-      j1.deck = [...lastj1.deck];
+      j1.deck = [...lastDeck];
     }
   }
 
