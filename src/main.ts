@@ -34,7 +34,6 @@ async function startGeneration() {
 
   let lastWinRate = 0;
   let lastDeck: Card[] = [];
-  let firstj1 = j1.copy();
 
   for (let generation = 0; generation < NB_GENERATION; generation++) {
     console.log("=== Generation" + generation + " ===");
@@ -83,8 +82,6 @@ async function startGeneration() {
   }
 
   console.log(j1.deck);
-  console.log(firstj1.deckDiffer(j1.deck));
-  console.log(nbTour);
 
   generatePlot(j1.deck, "P1 Final Deck");
 }
