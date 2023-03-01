@@ -148,4 +148,29 @@ export class Player implements IDamageable {
 
     this.deck.push(addedCard);
   }
+
+  public resetMana() {
+    this.manaMax = 2;
+    this.mana = 0;
+  }
+
+  public exportDeck() {
+    let exp = [];
+
+    for (const card of this.deck) {
+      exp.push(card.export());
+    }
+
+    return JSON.stringify(exp);
+  }
+
+  public importDeck(deck: string) {
+    let inp = JSON.parse(deck);
+
+    for (const cardIn of inp) {
+      let card = new Card(cardIn.damage, cardIn.health);
+
+      this.deck.push(card);
+    }
+  }
 }

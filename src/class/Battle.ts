@@ -26,6 +26,9 @@ export class Battle {
         this.player2.draw();
       }
 
+      this.player1.resetMana();
+      this.player2.resetMana();
+
       let startPlayer = Math.floor(Math.random() * 2) + 1;
       let currentPlayer = startPlayer === 1 ? this.player1 : this.player2;
       let otherPlayer = startPlayer === 1 ? this.player2 : this.player1;

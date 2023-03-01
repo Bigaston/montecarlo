@@ -39,6 +39,13 @@ export class Card {
     return pre;
   }
 
+  public export() {
+    return {
+      damage: this.damage,
+      health: this.health,
+    };
+  }
+
   // STATIC
   static generateSetList() {
     const setList: Card[] = [];

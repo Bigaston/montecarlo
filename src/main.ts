@@ -94,6 +94,9 @@ async function startGeneration() {
     });
 
   generatePlot(j1.deck, "P1 Final Deck");
+  console.log(nbTour);
+
+  console.log(j1.exportDeck());
 }
 
 document.getElementById("startGeneration")!.addEventListener("click", () => {
