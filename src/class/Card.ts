@@ -1,4 +1,5 @@
 import { IDamageable } from "./IDamageable";
+import { log } from "./Logger";
 
 export class Card {
   public damage: number;
@@ -19,7 +20,7 @@ export class Card {
   public attack(target: IDamageable) {
     target.takeDamage(this.damage);
 
-    console.log(
+    log(
       this.name +
         " attaque " +
         target.name +

@@ -1,62 +1,139 @@
 import { Chart } from "chart.js/auto";
 import { Battle } from "./class/Battle";
+import { Card } from "./class/Card";
+import { log, setLog } from "./class/Logger";
 import { Player } from "./class/Player";
 import "./style.css";
 
-const j1 = new Player("Player1");
-const j2 = new Player("Player2");
+const NB_GAME = 1000;
+const NB_GENERATION = 100;
+setLog(false);
 
-j1.generateDeck();
-j2.generateDeck();
+let result = document.getElementById("result") as HTMLDivElement;
 
-console.log(j1);
-console.log(j2);
+async function startGeneration() {
+  result.innerHTML = "";
+  console.log("Start Generation");
 
-let nbVictoryJ1 = 0;
-let nbTourParty = [];
+  let j1 = new Player("Player1");
+  const j2 = new Player("Player2");
 
-for (let i = 0; i < 1000; i++) {
-  let battle = new Battle(j1, j2);
-  let result = battle.startBattle();
+  j1.generateDeck();
+  j2.generateDeck();
 
-  nbTourParty.push(result.nbTour);
+  console.log(j1.deckDiffer(j2.deck));
 
-  if (result.winner === j1.name) {
-    nbVictoryJ1++;
+  generatePlot(j1.deck, "P1 Deck");
+  generatePlot(j2.deck, "P2 Deck");
+
+  log(j1);
+  log(j2);
+
+  let nbVictoryJ1 = 0;
+  let nbTourParty = [];
+  let nbTour = [];
+
+  let lastWinRate = 0;
+  let lastj1 = j1.copy();
+  let firstj1 = j1.copy();
+
+  for (let generation = 0; generation < NB_GENERATION; generation++) {
+    console.log("=== Generation" + generation + " ===");
+
+    nbVictoryJ1 = 0;
+    nbTourParty = [];
+
+    for (let i = 0; i < NB_GAME; i++) {
+      log("=== Game" + i + " ===");
+
+      let battle = new Battle(j1, j2);
+      let result = await battle.startBattle();
+
+      nbTourParty.push(result.nbTour);
+
+      if (result.winner === j1.name) {
+        nbVictoryJ1++;
+      }
+    }
+
+    log("");
+    log("====================================");
+    log("Winrate de " + j1.name + ": " + (nbVictoryJ1 / NB_GAME) * 100 + "%");
+    log(
+      "Moyenne de tour par partie: " +
+        nbTourParty.reduce((a, b) => a + b) / NB_GAME +
+        " tours"
+    );
+
+    nbTour.push(nbTourParty.reduce((a, b) => a + b) / NB_GAME);
+
+    if (nbVictoryJ1 / NB_GAME > lastWinRate) {
+      console.log("Winrate: " + nbVictoryJ1 / NB_GAME + ">" + lastWinRate);
+      console.log("Progress");
+
+      lastWinRate = nbVictoryJ1 / NB_GAME;
+      lastj1 = j1.copy();
+
+      j1.deck.splice(Math.floor(Math.random() * j1.deck.length), 1);
+
+      let availableCard = Card.allCards.filter((c) => !j1.deck.includes(c));
+
+      let addedCard =
+        availableCard[Math.floor(Math.random() * availableCard.length)];
+
+      console.log(addedCard);
+
+      j1.deck.push(addedCard);
+      console.log(j1.deck);
+    } else {
+      console.log("Winrate: " + nbVictoryJ1 / NB_GAME + "<" + lastWinRate);
+      console.log("Rollback");
+      j1.deck = [...lastj1.deck];
+    }
   }
+
+  console.log(j1.deck);
+  console.log(firstj1.deckDiffer(j1.deck));
+  console.log(nbTour);
+
+  generatePlot(j1.deck, "P1 Final Deck");
 }
 
-console.log("");
-console.log("====================================");
-console.log("Winrate de " + j1.name + ": " + (nbVictoryJ1 / 1000) * 100 + "%");
-console.log(
-  "Moyenne de tour par partie: " +
-    nbTourParty.reduce((a, b) => a + b) / 1000 +
-    " tours"
-);
-
-let cardCount: { [key: string]: number } = {};
-
-j1.deck.forEach((card) => {
-  if (cardCount[card.cost + ""]) cardCount[card.cost + ""]++;
-  else cardCount[card.cost + ""] = 1;
+document.getElementById("startGeneration")!.addEventListener("click", () => {
+  startGeneration();
 });
 
-const data: { cost: number; count: number }[] = [];
+function generatePlot(deck: Card[], title: string) {
+  let p = document.createElement("p");
+  p.innerHTML = title;
+  result.appendChild(p);
 
-for (let cost in cardCount) {
-  data.push({ cost: parseInt(cost), count: cardCount[cost] });
+  let canvas = document.createElement("canvas");
+  result.appendChild(canvas);
+
+  let cardCount: { [key: string]: number } = {};
+
+  deck.forEach((card) => {
+    if (cardCount[card.cost + ""]) cardCount[card.cost + ""]++;
+    else cardCount[card.cost + ""] = 1;
+  });
+
+  const data: { cost: number; count: number }[] = [];
+
+  for (let cost in cardCount) {
+    data.push({ cost: parseInt(cost), count: cardCount[cost] });
+  }
+
+  new Chart(canvas, {
+    type: "bar",
+    data: {
+      labels: data.map((row) => row.cost),
+      datasets: [
+        {
+          label: "Card per cost",
+          data: data.map((row) => row.count),
+        },
+      ],
+    },
+  });
 }
-
-new Chart(document.getElementById("plot") as HTMLCanvasElement, {
-  type: "bar",
-  data: {
-    labels: data.map((row) => row.cost),
-    datasets: [
-      {
-        label: "Card per cost",
-        data: data.map((row) => row.count),
-      },
-    ],
-  },
-});

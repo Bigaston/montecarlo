@@ -1,12 +1,14 @@
 import { Card } from "./Card";
 import { IDamageable } from "./IDamageable";
+import { log } from "./Logger";
 
 export class Player implements IDamageable {
   public name: string;
   public health: number = 20;
   public deck: Card[] = [];
   public hand: Card[] = [];
-  public mana: number = 2;
+  public mana: number = 0;
+  public manaMax: number = 2;
 
   public playedCards: Card[] = [];
   public justPlayedCard: Card[] = [];
@@ -31,7 +33,7 @@ export class Player implements IDamageable {
   }
 
   public shuffleDeck() {
-    console.log(this.name + " mélange");
+    log(this.name + " mélange");
     let stayCard = [...this.deck];
 
     this.deck = [];
@@ -46,7 +48,7 @@ export class Player implements IDamageable {
   public draw() {
     let card = this.deck.shift();
     if (card !== undefined) {
-      console.log(this.name + " pioche " + card.name);
+      log(this.name + " pioche " + card.name);
 
       this.hand.push(card);
     }
@@ -56,32 +58,27 @@ export class Player implements IDamageable {
     let playableCard = this.hand.filter((card) => card.cost <= this.mana);
 
     if (playableCard.length === 0) {
-      console.log(this.name + " ne peut plus jouer de carte");
+      log(
+        this.name + " ne peut plus jouer de carte. Reste " + this.mana + " mana"
+      );
       return false;
     }
 
-    let choosedCard = playableCard[0];
+    playableCard = playableCard.sort((a, b) => b.cost - a.cost);
 
-    for (let i = 0; i < playableCard.length; i++) {
-      if (
-        playableCard[i].cost >= choosedCard.cost &&
-        playableCard[i].cost <= this.mana
-      ) {
-        choosedCard = playableCard[i];
-      }
-    }
+    let choosedCard = playableCard[0];
 
     this.justPlayedCard.push(choosedCard);
     this.hand = this.hand.filter((c) => c !== choosedCard);
     this.mana -= choosedCard.cost;
 
-    console.log(this.name + " joue " + choosedCard.name);
+    log(this.name + " joue " + choosedCard.name);
 
     return true;
   }
 
   public moveJustPlayedCard() {
-    console.log(this.name + " déplace les cartes avec mal d'invocation");
+    log(this.name + " déplace les cartes avec mal d'invocation");
 
     this.playedCards.push(...this.justPlayedCard);
     this.justPlayedCard = [];
@@ -102,7 +99,7 @@ export class Player implements IDamageable {
       hand += card.name + " ";
     }
 
-    console.log(hand);
+    log(hand);
   }
 
   public displayPlayedCards() {
@@ -111,7 +108,7 @@ export class Player implements IDamageable {
       playedCards += card.name + " ";
     }
 
-    console.log(playedCards);
+    log(playedCards);
   }
 
   public displayJustPlayedCard() {
@@ -120,6 +117,24 @@ export class Player implements IDamageable {
       justPlayedCard += card.name + " ";
     }
 
-    console.log(justPlayedCard);
+    log(justPlayedCard);
+  }
+
+  public deckDiffer(deck: Card[]) {
+    let cardDiffer = [];
+
+    for (let i = 0; i < this.deck.length; i++) {
+      if (!deck.includes(this.deck[i])) {
+        cardDiffer.push(this.deck[i]);
+      }
+    }
+
+    for (let i = 0; i < deck.length; i++) {
+      if (!this.deck.includes(deck[i]) && !cardDiffer.includes(deck[i])) {
+        cardDiffer.push(deck[i]);
+      }
+    }
+
+    return cardDiffer;
   }
 }
