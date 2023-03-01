@@ -1,3 +1,4 @@
+import { Chart } from "chart.js/auto";
 import { Battle } from "./class/Battle";
 import { Player } from "./class/Player";
 import "./style.css";
@@ -33,3 +34,29 @@ console.log(
     nbTourParty.reduce((a, b) => a + b) / 1000 +
     " tours"
 );
+
+let cardCount: { [key: string]: number } = {};
+
+j1.deck.forEach((card) => {
+  if (cardCount[card.cost + ""]) cardCount[card.cost + ""]++;
+  else cardCount[card.cost + ""] = 1;
+});
+
+const data: { cost: number; count: number }[] = [];
+
+for (let cost in cardCount) {
+  data.push({ cost: parseInt(cost), count: cardCount[cost] });
+}
+
+new Chart(document.getElementById("plot") as HTMLCanvasElement, {
+  type: "bar",
+  data: {
+    labels: data.map((row) => row.cost),
+    datasets: [
+      {
+        label: "Card per cost",
+        data: data.map((row) => row.count),
+      },
+    ],
+  },
+});
