@@ -165,6 +165,7 @@ export class Player implements IDamageable {
   }
 
   public importDeck(deck: string) {
+    this.deck = [];
     let inp = JSON.parse(deck);
 
     for (const cardIn of inp) {

@@ -10,14 +10,25 @@ setLog(false);
 
 let result = document.getElementById("result") as HTMLDivElement;
 
+let j1 = new Player("Player1");
+
+let deckHasBeenImported = false;
+
+document.getElementById("importDeckButton")!.addEventListener("click", () => {
+  let deck = document.getElementById("importDeck") as HTMLTextAreaElement;
+  j1.importDeck(deck.value);
+
+  deckHasBeenImported = true;
+});
+
 async function startGeneration() {
   result.innerHTML = "";
   console.log("Start Generation");
 
-  let j1 = new Player("Player1");
   const j2 = new Player("Player2");
 
-  j1.generateDeck();
+  if (!deckHasBeenImported) j1.generateDeck();
+
   j2.generateDeck();
 
   console.log(j1.deckDiffer(j2.deck));
