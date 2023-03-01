@@ -85,6 +85,14 @@ async function startGeneration() {
 
   console.log(j1.deck);
 
+  let div = document.getElementById("finalDeck") as HTMLDivElement;
+
+  j1.deck
+    .sort((a, b) => a.cost - b.cost)
+    .forEach((card) => {
+      div.appendChild(card.toText());
+    });
+
   generatePlot(j1.deck, "P1 Final Deck");
 }
 

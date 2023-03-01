@@ -31,6 +31,14 @@ export class Card {
     );
   }
 
+  public toText() {
+    let pre = document.createElement("pre");
+
+    pre.innerHTML = `<span style="color: blue; font-weight:bold">${this.cost}</span>-----\n|     |\n|     |\n|     |\n<span style="color: gold; font-weight: bold">${this.damage}</span>-----<span style="color: red; font-weight: bold">${this.health}</span>`;
+
+    return pre;
+  }
+
   // STATIC
   static generateSetList() {
     const setList: Card[] = [];
