@@ -1,4 +1,5 @@
 import { Chart } from "chart.js/auto";
+import { Application } from "pixi.js";
 import { Battle } from "./class/Battle";
 import { Card } from "./class/Card";
 import { log, setLog } from "./class/Logger";
@@ -6,6 +7,41 @@ import { Player } from "./class/Player";
 import { NB_GAME, NB_GENERATION } from "./Params";
 import "./style.css";
 
+// Game
+const app = new Application({ width: 1000, height: 720 });
+let battle: Battle | undefined;
+
+document
+  .getElementById("battleVisual")
+  ?.appendChild(app.view as HTMLCanvasElement);
+
+document.getElementById("startBattle")?.addEventListener("click", () => {
+  const j1 = new Player("Player1");
+  const j2 = new Player("Player2");
+
+  j1.importDeck(
+    (document.getElementById("j1deck") as HTMLTextAreaElement).value
+  );
+  j2.importDeck(
+    (document.getElementById("j2deck") as HTMLTextAreaElement).value
+  );
+
+  battle = new Battle(j1, j2);
+
+  battle.startDrawBattle();
+
+  battle?.drawState(app);
+
+  console.log(j1);
+  console.log(j2);
+});
+
+document.getElementById("nextStep")?.addEventListener("click", () => {
+  battle?.nextTurn();
+  battle?.drawState(app);
+});
+
+// Simulation
 setLog(false);
 
 let result = document.getElementById("result") as HTMLDivElement;
@@ -57,8 +93,8 @@ async function startGeneration() {
     for (let i = 0; i < NB_GAME; i++) {
       log("=== Game" + i + " ===");
 
-      let battle = new Battle(j1, j2);
-      let result = await battle.startBattle();
+      let bat = new Battle(j1, j2);
+      let result = await bat.startBattle();
 
       nbTourParty.push(result.nbTour);
 
