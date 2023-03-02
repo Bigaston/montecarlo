@@ -7,66 +7,28 @@ import { Player } from "./class/Player";
 import { NB_GAME, NB_GENERATION } from "./Params";
 import "./style.css";
 
-// Game
-// const app = new Application({ width: 1000, height: 720 });
-// let battle: Battle | undefined;
-
-// app.ticker.add(() => {});
-
-// document
-//   .getElementById("battleVisual")
-//   ?.appendChild(app.view as HTMLCanvasElement);
-
-// document.getElementById("startBattle")?.addEventListener("click", () => {
-//   const j1 = new Player("Player1");
-//   const j2 = new Player("Player2");
-
-//   j1.importDeck(
-//     (document.getElementById("j1deck") as HTMLTextAreaElement).value
-//   );
-//   j2.importDeck(
-//     (document.getElementById("j2deck") as HTMLTextAreaElement).value
-//   );
-
-//   battle = new Battle(j1, j2);
-
-//   battle.startDrawBattle();
-
-//   battle?.drawState(app);
-
-//   console.log(j1);
-//   console.log(j2);
-// });
-
-// document.getElementById("nextStep")?.addEventListener("click", () => {
-//   battle?.nextTurn(app.stage);
-//   battle?.drawState(app);
-// });
-
 // Simulation
 setLog(false);
 
 let result = document.getElementById("result") as HTMLDivElement;
 
-let j1 = new Player("Player1");
+// let deckHasBeenImported = false;
 
-let deckHasBeenImported = false;
+// document.getElementById("importDeckButton")!.addEventListener("click", () => {
+//   let deck = document.getElementById("importDeck") as HTMLTextAreaElement;
+//   j1.importDeck(deck.value);
 
-document.getElementById("importDeckButton")!.addEventListener("click", () => {
-  let deck = document.getElementById("importDeck") as HTMLTextAreaElement;
-  j1.importDeck(deck.value);
-
-  deckHasBeenImported = true;
-});
+//   deckHasBeenImported = true;
+// });
 
 async function startGeneration() {
   result.innerHTML = "";
   console.log("Start Generation");
 
+  const j1 = new Player("Player1");
   const j2 = new Player("Player2");
 
-  if (!deckHasBeenImported) j1.generateDeck();
-
+  j1.generateDeck();
   j2.generateDeck();
 
   console.log(j1.deckDiffer(j2.deck));

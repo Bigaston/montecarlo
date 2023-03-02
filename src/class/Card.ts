@@ -1,20 +1,49 @@
 import { IDamageable } from "./IDamageable";
 import { log } from "./Logger";
 
-export class Card {
+export class Card implements IDamageable {
   public damage: number;
   public health: number;
+  public maxHealth: number;
   public cost: number;
 
+  public canAttack: boolean = false;
+  public hasTaunt: boolean = false;
+
   get name() {
-    return this.damage + "/" + this.health + "," + this.cost;
+    return (
+      (this.canAttack ? "" : "*") +
+      this.damage +
+      "/" +
+      this.maxHealth +
+      "," +
+      this.cost +
+      "," +
+      (this.hasTaunt ? "T" : "")
+    );
   }
 
-  constructor(damage: number, health: number) {
+  constructor(
+    damage: number,
+    health: number,
+    capacity: { hasTaunt: boolean } = { hasTaunt: false }
+  ) {
     this.damage = damage;
     this.health = health;
+    this.maxHealth = health;
+    this.hasTaunt = capacity.hasTaunt;
 
     this.cost = Math.floor((damage + health) / 2);
+
+    if (this.hasTaunt) {
+      this.cost += 1;
+    }
+  }
+
+  takeDamage(damage: number) {
+    this.health -= damage;
+
+    return this.damage;
   }
 
   public attack(target: IDamageable) {
@@ -34,7 +63,15 @@ export class Card {
   public toText() {
     let pre = document.createElement("pre");
 
-    pre.innerHTML = `<span style="color: blue; font-weight:bold">${this.cost}</span>-----\n|     |\n|     |\n|     |\n<span style="color: gold; font-weight: bold">${this.damage}</span>-----<span style="color: red; font-weight: bold">${this.health}</span>`;
+    pre.innerHTML = `<span style="color: blue; font-weight:bold">${
+      this.cost
+    }</span>-----\n|     |\n|     |\n|  ${
+      this.hasTaunt ? "T" : " "
+    }  |\n<span style="color: gold; font-weight: bold">${
+      this.damage
+    }</span>-----<span style="color: red; font-weight: bold">${
+      this.health
+    }</span>`;
 
     return pre;
   }
@@ -44,6 +81,10 @@ export class Card {
       damage: this.damage,
       health: this.health,
     };
+  }
+
+  public copy() {
+    return new Card(this.damage, this.health, { hasTaunt: this.hasTaunt });
   }
 
   // STATIC
@@ -56,6 +97,12 @@ export class Card {
 
         if (card.cost <= 6) {
           setList.push(card);
+        }
+
+        let cardTaunt = new Card(att, def, { hasTaunt: true });
+
+        if (card.cost <= 6) {
+          setList.push(cardTaunt);
         }
       }
     }

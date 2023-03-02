@@ -1,4 +1,5 @@
 import { SECOND_PLAYER_MORE_CARD } from "../Params";
+import { Card } from "./Card";
 import { log } from "./Logger";
 import { Player } from "./Player";
 
@@ -69,12 +70,24 @@ export class Battle {
           }
         }
 
-        currentPlayer.displayJustPlayedCard();
         currentPlayer.displayPlayedCards();
 
         // Attaque de toutes les cartes possibles
-        for (const card of currentPlayer.playedCards) {
-          card.attack(otherPlayer);
+        for (const card of currentPlayer.playedCards.filter(
+          (c) => c.canAttack
+        )) {
+          let target = otherPlayer.chooseTarget(card);
+
+          card.attack(target);
+
+          if (target instanceof Card) {
+            if (target.health <= 0) {
+              otherPlayer.playedCards = otherPlayer.playedCards.filter(
+                (c) => c.name !== target.name
+              );
+              log(target.name + " est mort");
+            }
+          }
         }
 
         // Déplacement des cartes juste posées dans les cartes posées
