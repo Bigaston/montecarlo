@@ -12,26 +12,27 @@ setLog(false);
 
 let result = document.getElementById("result") as HTMLDivElement;
 
-// let deckHasBeenImported = false;
+let deckHasBeenImported = false;
 
-// document.getElementById("importDeckButton")!.addEventListener("click", () => {
-//   let deck = document.getElementById("importDeck") as HTMLTextAreaElement;
-//   j1.importDeck(deck.value);
+const j1 = new Player("Player1");
+const j2 = new Player("Player2");
 
-//   deckHasBeenImported = true;
-// });
+document.getElementById("importDeckButton")!.addEventListener("click", () => {
+  let deck = document.getElementById("importDeck") as HTMLTextAreaElement;
+  j2.importDeck(deck.value);
+
+  deckHasBeenImported = true;
+});
 
 async function startGeneration() {
   result.innerHTML = "";
   console.log("Start Generation");
 
-  const j1 = new Player("Player1");
-  const j2 = new Player("Player2");
-
   j1.generateDeck();
-  j2.generateDeck();
 
-  console.log(j1.deckDiffer(j2.deck));
+  if (!deckHasBeenImported) j2.generateDeck();
+
+  console.log(j2.exportDeck());
 
   generatePlot(j1.deck, "P1 Deck");
 
@@ -41,6 +42,8 @@ async function startGeneration() {
   let nbVictoryJ1 = 0;
   let nbTourParty = [];
   let nbTour = [];
+  let winRates = [];
+  let lastWinRates = [];
 
   let lastWinRate = 0;
   let lastDeck: Card[] = [];
@@ -77,6 +80,7 @@ async function startGeneration() {
     );
 
     nbTour.push(nbTourParty.reduce((a, b) => a + b) / NB_GAME);
+    winRates.push(nbVictoryJ1 / NB_GAME);
 
     if (nbVictoryJ1 / NB_GAME > lastWinRate) {
       console.log(
@@ -92,11 +96,14 @@ async function startGeneration() {
 
       j1.deck = [...lastDeck];
     }
+
+    lastWinRates.push(lastWinRate);
   }
 
   console.log(j1.deck);
 
   let div = document.getElementById("finalDeck") as HTMLDivElement;
+  div.innerHTML = "";
 
   j1.deck
     .sort((a, b) => a.cost - b.cost)
@@ -106,6 +113,30 @@ async function startGeneration() {
 
   generatePlot(j1.deck, "P1 Final Deck");
   console.log(nbTour);
+
+  let p = document.createElement("p");
+  p.innerHTML = "Winrate";
+  result.appendChild(p);
+
+  let canvas = document.createElement("canvas");
+  result.appendChild(canvas);
+
+  new Chart(canvas, {
+    type: "line",
+    data: {
+      labels: winRates.map((_w, i) => i),
+      datasets: [
+        {
+          label: "Winrate",
+          data: winRates,
+        },
+        {
+          label: "Winrate Limite",
+          data: lastWinRates,
+        },
+      ],
+    },
+  });
 
   console.log(j1.exportDeck());
 }

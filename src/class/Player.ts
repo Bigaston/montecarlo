@@ -30,6 +30,7 @@ export class Player implements IDamageable {
   }
 
   public generateDeck() {
+    this.deck = [];
     let stayCard = [...Card.allCards];
 
     for (let i = 0; i < 30; i++) {
