@@ -123,7 +123,7 @@ export class Battle {
     // app.stage.addChild(this.player1.hand[0].toSprite());
   }
 
-  public nextTurn() {
+  public nextTurn(stage: Container) {
     if (this.currentPlayer === undefined || this.otherPlayer === undefined)
       return;
 
@@ -139,6 +139,7 @@ export class Battle {
 
     for (const card of this.currentPlayer.playedCards) {
       card.attack(this.otherPlayer);
+      this.otherPlayer.drawDamage(stage, card.x, card.y);
     }
 
     this.currentPlayer.moveJustPlayedCard();
@@ -194,13 +195,13 @@ export class Battle {
     let terrainP1 = new Container();
     app.stage.addChild(terrainP1);
 
-    this.drawTerrain(this.player1, terrainP1);
+    this.drawTerrain(this.player1, terrainP1, 100);
     terrainP1.y = 100;
 
     let terrainP2 = new Container();
     app.stage.addChild(terrainP2);
 
-    this.drawTerrain(this.player2, terrainP2);
+    this.drawTerrain(this.player2, terrainP2, 400);
     terrainP2.y = 400;
   }
 
@@ -217,7 +218,7 @@ export class Battle {
     });
   }
 
-  public drawTerrain(player: Player, stage: Container) {
+  public drawTerrain(player: Player, stage: Container, y: number = 0) {
     player.playedCards.forEach((card, index) => {
       let spr = card.toSprite();
       spr.x = index * 160;
@@ -225,6 +226,9 @@ export class Battle {
 
       spr.width = 160;
       spr.height = 200;
+
+      card.x = index * 160;
+      card.y = y;
 
       stage.addChild(spr);
     });
@@ -236,6 +240,9 @@ export class Battle {
 
       spr.width = 160;
       spr.height = 200;
+
+      card.x = index * 160;
+      card.y = y;
 
       stage.addChild(spr);
     });

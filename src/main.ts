@@ -11,6 +11,8 @@ import "./style.css";
 const app = new Application({ width: 1000, height: 720 });
 let battle: Battle | undefined;
 
+app.ticker.add(() => {});
+
 document
   .getElementById("battleVisual")
   ?.appendChild(app.view as HTMLCanvasElement);
@@ -37,7 +39,7 @@ document.getElementById("startBattle")?.addEventListener("click", () => {
 });
 
 document.getElementById("nextStep")?.addEventListener("click", () => {
-  battle?.nextTurn();
+  battle?.nextTurn(app.stage);
   battle?.drawState(app);
 });
 

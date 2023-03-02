@@ -6,6 +6,8 @@ export class Card {
   public damage: number;
   public health: number;
   public cost: number;
+  public x: number = 0;
+  public y: number = 0;
 
   get name() {
     return this.damage + "/" + this.health + "," + this.cost;
