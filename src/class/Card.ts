@@ -1,13 +1,10 @@
 import { IDamageable } from "./IDamageable";
 import { log } from "./Logger";
-import { Sprite, Text } from "pixi.js";
 
 export class Card {
   public damage: number;
   public health: number;
   public cost: number;
-  public x: number = 0;
-  public y: number = 0;
 
   get name() {
     return this.damage + "/" + this.health + "," + this.cost;
@@ -47,48 +44,6 @@ export class Card {
       damage: this.damage,
       health: this.health,
     };
-  }
-
-  public toSprite() {
-    let spr = Sprite.from("./card.png");
-
-    const cost = new Text(this.cost, {
-      fontFamily: "Arial",
-      fontSize: 64,
-      fill: 0xffffff,
-      align: "center",
-    });
-
-    cost.x = 10;
-    cost.y = 30;
-
-    spr.addChild(cost);
-
-    const damage = new Text(this.damage, {
-      fontFamily: "Arial",
-      fontSize: 64,
-      fill: 0xffffff,
-      align: "center",
-    });
-
-    damage.x = 15;
-    damage.y = 320;
-
-    spr.addChild(damage);
-
-    const health = new Text(this.health, {
-      fontFamily: "Arial",
-      fontSize: 64,
-      fill: 0xffffff,
-      align: "center",
-    });
-
-    health.x = 205;
-    health.y = 320;
-
-    spr.addChild(health);
-
-    return spr;
   }
 
   // STATIC

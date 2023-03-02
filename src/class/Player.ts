@@ -1,7 +1,6 @@
 import { Card } from "./Card";
 import { IDamageable } from "./IDamageable";
 import { log } from "./Logger";
-import { Container, Graphics } from "pixi.js";
 
 export class Player implements IDamageable {
   public name: string;
@@ -23,20 +22,6 @@ export class Player implements IDamageable {
     this.name = name;
     this.targetX = targetX;
     this.targetY = targetY;
-  }
-
-  drawDamage(stage: Container, fromX: number, fromY: number): void {
-    let myGraph = new Graphics();
-    stage.addChild(myGraph);
-
-    // Move it to the beginning of the line
-    myGraph.position.set(fromX, fromY);
-
-    // Draw the line (endPoint should be relative to myGraph's position)
-    myGraph
-      .lineStyle(10, 0xffffff)
-      .moveTo(0, 0)
-      .lineTo(fromX - this.targetX, fromY - this.targetY);
   }
 
   takeDamage(damage: number): void {
