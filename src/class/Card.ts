@@ -101,7 +101,7 @@ export class Card implements IDamageable {
 
         let cardTaunt = new Card(att, def, { hasTaunt: true });
 
-        if (card.cost <= 6) {
+        if (cardTaunt.cost <= 6) {
           setList.push(cardTaunt);
         }
       }
