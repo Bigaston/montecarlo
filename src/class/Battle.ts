@@ -1,5 +1,6 @@
 import { SECOND_PLAYER_MORE_CARD } from "../Params";
 import { Card } from "./Card";
+import { IDamageable } from "./IDamageable";
 import { log } from "./Logger";
 import { Player } from "./Player";
 
@@ -76,14 +77,32 @@ export class Battle {
         for (const card of currentPlayer.playedCards.filter(
           (c) => c.canAttack
         )) {
-          let target = otherPlayer.chooseTarget(card);
+          let target: IDamageable | undefined;
 
-          card.attack(target);
+          if (card.hasDistortion) {
+            let cardWithTauntAndDisto = otherPlayer.playedCards.filter(
+              (c) => c.hasTaunt && c.hasDistortion
+            );
+
+            if (cardWithTauntAndDisto.length > 0) {
+              target = cardWithTauntAndDisto[0];
+            } else {
+              target = otherPlayer;
+            }
+          } else {
+            target = otherPlayer.chooseTarget(card);
+          }
+
+          if (card.hasTremble) {
+            card.trembleAttack(target, otherPlayer);
+          } else {
+            card.attack(target);
+          }
 
           if (target instanceof Card) {
             if (target.health <= 0) {
               otherPlayer.playedCards = otherPlayer.playedCards.filter(
-                (c) => c.name !== target.name
+                (c) => c.name !== (target as IDamageable).name
               );
               log(target.name + " est mort");
             }
