@@ -174,7 +174,7 @@ export class Player implements IDamageable {
     let inp = JSON.parse(deck);
 
     for (const cardIn of inp) {
-      let card = new Card(cardIn.damage, cardIn.health, {
+      let card = new Card(cardIn.attack, cardIn.defense, {
         hasTaunt: cardIn.hasTaunt,
         hasDistortion: cardIn.hasDistortion,
         hasTremble: cardIn.hasTremble,

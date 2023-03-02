@@ -120,7 +120,7 @@ export class Card implements IDamageable {
       this.hasDistortion ? "D" : " "
     }${
       this.hasTremble ? "T" : " "
-    }  |\n<span style="color: gold; font-weight: bold">${
+    }|\n<span style="color: gold; font-weight: bold">${
       this.damage
     }</span>-----<span style="color: red; font-weight: bold">${
       this.health
@@ -131,8 +131,8 @@ export class Card implements IDamageable {
 
   public export() {
     return {
-      damage: this.damage,
-      health: this.health,
+      attack: this.damage,
+      defense: this.health,
       hasTaunt: this.hasTaunt,
       hasDistortion: this.hasDistortion,
       hasTremble: this.hasTremble,

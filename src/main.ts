@@ -12,29 +12,78 @@ setLog(false);
 
 let result = document.getElementById("result") as HTMLDivElement;
 
-let deckHasBeenImported = false;
+let deckHasBeenImportedj1 = false;
+let deckHasBeenImportedj2 = false;
 
 const j1 = new Player("Player1");
 const j2 = new Player("Player2");
 
-document.getElementById("importDeckButton")!.addEventListener("click", () => {
-  let deck = document.getElementById("importDeck") as HTMLTextAreaElement;
+document.getElementById("importDeckButtonj1")!.addEventListener("click", () => {
+  let deck = document.getElementById("importDeckj1") as HTMLTextAreaElement;
+  j1.importDeck(deck.value);
+
+  deckHasBeenImportedj1 = true;
+});
+
+document.getElementById("importDeckButtonj2")!.addEventListener("click", () => {
+  let deck = document.getElementById("importDeckj2") as HTMLTextAreaElement;
   j2.importDeck(deck.value);
 
-  deckHasBeenImported = true;
+  deckHasBeenImportedj2 = true;
 });
 
 async function startGeneration() {
   result.innerHTML = "";
   console.log("Start Generation");
 
-  j1.generateDeck();
-
-  if (!deckHasBeenImported) j2.generateDeck();
+  if (!deckHasBeenImportedj1) j1.generateDeck();
+  if (!deckHasBeenImportedj2) j2.generateDeck();
 
   console.log(j2.exportDeck());
 
-  generatePlot(j1.deck, "P1 Deck");
+  let can = document.createElement("canvas");
+  result.appendChild(can);
+
+  let cardCountj1: { [key: string]: number } = {};
+  let cardCountj2: { [key: string]: number } = {};
+
+  j1.deck.forEach((card) => {
+    if (cardCountj1[card.cost + ""]) cardCountj1[card.cost + ""]++;
+    else cardCountj1[card.cost + ""] = 1;
+  });
+
+  j2.deck.forEach((card) => {
+    if (cardCountj2[card.cost + ""]) cardCountj2[card.cost + ""]++;
+    else cardCountj2[card.cost + ""] = 1;
+  });
+
+  const dataj1: { cost: number; count: number }[] = [];
+  const dataj2: { cost: number; count: number }[] = [];
+
+  for (let cost in cardCountj1) {
+    dataj1.push({ cost: parseInt(cost), count: cardCountj1[cost] });
+  }
+
+  for (let cost in cardCountj2) {
+    dataj2.push({ cost: parseInt(cost), count: cardCountj1[cost] });
+  }
+
+  new Chart(can, {
+    type: "bar",
+    data: {
+      labels: [0, 1, 2, 3, 4, 5, 6],
+      datasets: [
+        {
+          label: "J1",
+          data: dataj1.map((row) => row.count),
+        },
+        {
+          label: "J2",
+          data: dataj2.map((row) => row.count),
+        },
+      ],
+    },
+  });
 
   log(j1);
   log(j2);
@@ -129,10 +178,12 @@ async function startGeneration() {
         {
           label: "Winrate",
           data: winRates,
+          pointStyle: false,
         },
         {
           label: "Winrate Limite",
           data: lastWinRates,
+          pointStyle: false,
         },
       ],
     },
