@@ -32,7 +32,15 @@ document.getElementById("importDeckButtonj2")!.addEventListener("click", () => {
   deckHasBeenImportedj2 = true;
 });
 
+document.getElementById("removeRemovedCard")!.addEventListener("click", () => {
+  Card.resetRemovedCards();
+  console.log("Removed Cards: ", Card.getRemovedCards());
+});
+
 async function startGeneration() {
+  Card.allCards = Card.generateSetList();
+  console.log(Card.allCards);
+
   result.innerHTML = "";
   console.log("Start Generation");
 
@@ -57,7 +65,7 @@ async function startGeneration() {
     console.log("=== Generation" + generation + " ===");
 
     // Change Deck
-    j1.replaceDeck();
+    let removedCard = j1.replaceDeck();
 
     nbVictoryJ1 = 0;
     nbTourParty = [];
@@ -66,7 +74,7 @@ async function startGeneration() {
       log("=== Game" + i + " ===");
 
       let bat = new Battle(j1, j2);
-      let result = await bat.startBattle();
+      let result = bat.startBattle();
 
       nbTourParty.push(result.nbTour);
 
@@ -94,12 +102,15 @@ async function startGeneration() {
 
       lastWinRate = nbVictoryJ1 / NB_GAME;
       lastDeck = [...j1.deck];
+
+      Card.addRemovedCards(removedCard[0]);
     } else {
       console.log(
         "❌ Rollback | Winrate: " + nbVictoryJ1 / NB_GAME + "<" + lastWinRate
       );
 
       j1.deck = [...lastDeck];
+      Card.addRemovedCards(removedCard[1]);
     }
 
     lastWinRates.push(lastWinRate);
@@ -176,10 +187,20 @@ async function startGeneration() {
       },
     },
   });
+
+  console.log(Card.nbParty);
+  console.log(Card.getRemovedCardsSortBanalized());
 }
 
 document.getElementById("startGeneration")!.addEventListener("click", () => {
   startGeneration();
+});
+
+document.getElementById("startGenerationx10")!.addEventListener("click", () => {
+  for (let i = 0; i < 10; i++) {
+    console.log("=== Generation" + i + " ===");
+    startGeneration();
+  }
 });
 
 function generatePlot(deck1: Card[], deck2: Card[], title: string) {

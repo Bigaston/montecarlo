@@ -145,8 +145,32 @@ export class Player implements IDamageable {
     return cardDiffer;
   }
 
+  public static deckDiffer(deck1: Card[], deck2: Card[]) {
+    let cardDiffer = [];
+
+    for (let i = 0; i < deck1.length; i++) {
+      if (!deck2.map((ca) => ca.name).includes(deck1[i].name)) {
+        cardDiffer.push(deck1[i]);
+      }
+    }
+
+    for (let i = 0; i < deck2.length; i++) {
+      if (
+        !deck1.map((ca) => ca.name).includes(deck2[i].name) &&
+        !cardDiffer.map((ca) => ca.name).includes(deck2[i].name)
+      ) {
+        cardDiffer.push(deck2[i]);
+      }
+    }
+
+    return cardDiffer;
+  }
+
   public replaceDeck() {
-    this.deck.splice(Math.floor(Math.random() * this.deck.length), 1);
+    let removedCard = this.deck.splice(
+      Math.floor(Math.random() * this.deck.length),
+      1
+    );
 
     let availableCard = Card.allCards.filter((c) => {
       return !this.deck.map((ca) => ca.name).includes(c.name);
@@ -156,6 +180,8 @@ export class Player implements IDamageable {
       availableCard[Math.floor(Math.random() * availableCard.length)];
 
     this.deck.push(addedCard.copy());
+
+    return [removedCard[0], addedCard];
   }
 
   public resetMana() {
