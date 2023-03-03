@@ -39,13 +39,12 @@ document.getElementById("removeRemovedCard")!.addEventListener("click", () => {
 });
 
 async function startGeneration() {
-  Card.allCards = Card.generateSetList();
-  console.log(Card.allCards);
-
   result.innerHTML = "";
   console.log("Start Generation");
 
   if (!deckHasBeenImportedj1) j1.generateDeck(true);
+  console.log(Card.allCards);
+
   if (!deckHasBeenImportedj2) j2.generateDeck();
 
   Card.allCards = Card.generateSetList();
