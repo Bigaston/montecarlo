@@ -278,7 +278,7 @@ function download(filename: string, text: string) {
 }
 
 function takeScreenshot() {
-  html2canvas(document.querySelector("#result") as HTMLDivElement).then(
+  html2canvas(document.querySelector("#capture") as HTMLDivElement).then(
     (canvas) => {
       // document.body.appendChild(canvas);
       canvas.toBlob((blob) => {

@@ -164,7 +164,7 @@ export class Card implements IDamageable {
 
           if (
             card.cost <= 6 &&
-            deletedCards[card.name]?.banalized < MIN_REMOVED_CARD_COUNT
+            (deletedCards[card.name]?.banalized ?? 0) < MIN_REMOVED_CARD_COUNT
           ) {
             setList.push(card);
           }
@@ -178,7 +178,7 @@ export class Card implements IDamageable {
 
             if (
               cardTaunt.cost <= 6 &&
-              deletedCards[card.name]?.banalized < MIN_REMOVED_CARD_COUNT
+              (deletedCards[card.name]?.banalized ?? 0) < MIN_REMOVED_CARD_COUNT
             ) {
               setList.push(cardTaunt);
             }
@@ -193,7 +193,7 @@ export class Card implements IDamageable {
 
             if (
               cardDistortion.cost <= 6 &&
-              deletedCards[card.name]?.banalized < MIN_REMOVED_CARD_COUNT
+              (deletedCards[card.name]?.banalized ?? 0) < MIN_REMOVED_CARD_COUNT
             ) {
               setList.push(cardDistortion);
             }
@@ -208,7 +208,7 @@ export class Card implements IDamageable {
 
             if (
               cardTremble.cost <= 6 &&
-              deletedCards[card.name]?.banalized < MIN_REMOVED_CARD_COUNT
+              (deletedCards[card.name]?.banalized ?? 0) < MIN_REMOVED_CARD_COUNT
             ) {
               setList.push(cardTremble);
             }
@@ -224,7 +224,7 @@ export class Card implements IDamageable {
 
             if (
               cardTauntDistortion.cost <= 6 &&
-              deletedCards[card.name]?.banalized < MIN_REMOVED_CARD_COUNT
+              (deletedCards[card.name]?.banalized ?? 0) < MIN_REMOVED_CARD_COUNT
             ) {
               setList.push(cardTauntDistortion);
             }
@@ -240,7 +240,7 @@ export class Card implements IDamageable {
 
             if (
               cardTauntTremble.cost <= 6 &&
-              deletedCards[card.name]?.banalized < MIN_REMOVED_CARD_COUNT
+              (deletedCards[card.name]?.banalized ?? 0) < MIN_REMOVED_CARD_COUNT
             ) {
               setList.push(cardTauntTremble);
             }
@@ -256,7 +256,7 @@ export class Card implements IDamageable {
 
             if (
               cardDistortionTremble.cost <= 6 &&
-              deletedCards[card.name]?.banalized < MIN_REMOVED_CARD_COUNT
+              (deletedCards[card.name]?.banalized ?? 0) < MIN_REMOVED_CARD_COUNT
             ) {
               setList.push(cardDistortionTremble);
             }
@@ -272,7 +272,7 @@ export class Card implements IDamageable {
 
             if (
               cardTauntDistortionTremble.cost <= 6 &&
-              deletedCards[card.name]?.banalized < MIN_REMOVED_CARD_COUNT
+              (deletedCards[card.name]?.banalized ?? 0) < MIN_REMOVED_CARD_COUNT
             ) {
               setList.push(cardTauntDistortionTremble);
             }
