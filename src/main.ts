@@ -190,6 +190,8 @@ async function startGeneration() {
 
   console.log(Card.nbParty);
   console.log(Card.getRemovedCardsSortBanalized());
+  console.log(j1.exportDeck());
+  download("deck.json", j1.exportDeck());
 }
 
 document.getElementById("startGeneration")!.addEventListener("click", () => {
@@ -254,4 +256,20 @@ function generatePlot(deck1: Card[], deck2: Card[], title: string) {
       },
     },
   });
+}
+
+function download(filename: string, text: string) {
+  var element = document.createElement("a");
+  element.setAttribute(
+    "href",
+    "data:application/json;charset=utf-8," + encodeURIComponent(text)
+  );
+  element.setAttribute("download", filename);
+
+  element.style.display = "none";
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
 }
