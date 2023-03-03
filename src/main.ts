@@ -1,4 +1,5 @@
 import { Chart } from "chart.js/auto";
+import html2canvas from "html2canvas";
 // import { Application } from "pixi.js";
 import { Battle } from "./class/Battle";
 import { Card } from "./class/Card";
@@ -192,6 +193,8 @@ async function startGeneration() {
   console.log(Card.getRemovedCardsSortBanalized());
   console.log(j1.exportDeck());
   download("deck.json", j1.exportDeck());
+
+  setTimeout(takeScreenshot, 1000);
 }
 
 document.getElementById("startGeneration")!.addEventListener("click", () => {
@@ -272,4 +275,37 @@ function download(filename: string, text: string) {
   element.click();
 
   document.body.removeChild(element);
+}
+
+function takeScreenshot() {
+  html2canvas(document.querySelector("#result") as HTMLDivElement).then(
+    (canvas) => {
+      // document.body.appendChild(canvas);
+      canvas.toBlob((blob) => {
+        console.log(blob);
+        blobToDataURL(blob as Blob).then((dataUrl) => {
+          var element = document.createElement("a");
+          element.setAttribute("href", dataUrl);
+          element.setAttribute("download", Date.now() + ".png");
+
+          element.style.display = "none";
+          document.body.appendChild(element);
+
+          element.click();
+
+          document.body.removeChild(element);
+        });
+      });
+    }
+  );
+}
+
+function blobToDataURL(blob: Blob): Promise<string> {
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (_e) => resolve(reader.result as string);
+    reader.onerror = (_e) => reject(reader.error);
+    reader.onabort = (_e) => reject(new Error("Read aborted"));
+    reader.readAsDataURL(blob);
+  });
 }

@@ -138,7 +138,7 @@ export class Card implements IDamageable {
       attributes: [
         this.hasTaunt ? "taunt" : "",
         this.hasDistortion ? "distortion" : "",
-        this.hasTremble ? "tremble" : "",
+        this.hasTremble ? "trample" : "",
       ].filter((a) => a !== ""),
     };
   }
