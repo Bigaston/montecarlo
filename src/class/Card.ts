@@ -134,9 +134,11 @@ export class Card implements IDamageable {
     return {
       attack: this.damage,
       defense: this.health,
-      hasTaunt: this.hasTaunt,
-      hasDistortion: this.hasDistortion,
-      hasTremble: this.hasTremble,
+      attributes: [
+        this.hasTaunt ? "taunt" : "",
+        this.hasDistortion ? "distortion" : "",
+        this.hasTremble ? "tremble" : "",
+      ].filter((a) => a !== ""),
     };
   }
 
