@@ -118,10 +118,10 @@ export class Card implements IDamageable {
 
     pre.innerHTML = `<span style="color: blue; font-weight:bold">${
       this.cost
-    }</span>-----\n|     |\n|     |\n|  ${this.hasTaunt ? "P" : " "}${
-      this.hasDistortion ? "D" : " "
+    }</span>-----\n|     |\n|     |\n|${this.hasTaunt ? "🛡️" : " "}${
+      this.hasDistortion ? "🪶" : " "
     }${
-      this.hasTremble ? "T" : " "
+      this.hasTremble ? "💥" : " "
     }|\n<span style="color: gold; font-weight: bold">${
       this.damage
     }</span>-----<span style="color: red; font-weight: bold">${
@@ -152,7 +152,7 @@ export class Card implements IDamageable {
   }
 
   // STATIC
-  static generateSetList() {
+  static generateSetList(clearBadCards: boolean = false) {
     const setList: Card[] = [];
 
     const deletedCards = Card.getRemovedCardsBanalized();
@@ -164,7 +164,9 @@ export class Card implements IDamageable {
 
           if (
             card.cost <= 6 &&
-            (deletedCards[card.name]?.banalized ?? 0) < MIN_REMOVED_CARD_COUNT
+            ((deletedCards[card.name]?.banalized ?? 0) <
+              MIN_REMOVED_CARD_COUNT ||
+              !clearBadCards)
           ) {
             setList.push(card);
           }
@@ -178,7 +180,9 @@ export class Card implements IDamageable {
 
             if (
               cardTaunt.cost <= 6 &&
-              (deletedCards[card.name]?.banalized ?? 0) < MIN_REMOVED_CARD_COUNT
+              ((deletedCards[card.name]?.banalized ?? 0) <
+                MIN_REMOVED_CARD_COUNT ||
+                !clearBadCards)
             ) {
               setList.push(cardTaunt);
             }
@@ -193,7 +197,9 @@ export class Card implements IDamageable {
 
             if (
               cardDistortion.cost <= 6 &&
-              (deletedCards[card.name]?.banalized ?? 0) < MIN_REMOVED_CARD_COUNT
+              ((deletedCards[card.name]?.banalized ?? 0) <
+                MIN_REMOVED_CARD_COUNT ||
+                !clearBadCards)
             ) {
               setList.push(cardDistortion);
             }
@@ -208,7 +214,9 @@ export class Card implements IDamageable {
 
             if (
               cardTremble.cost <= 6 &&
-              (deletedCards[card.name]?.banalized ?? 0) < MIN_REMOVED_CARD_COUNT
+              ((deletedCards[card.name]?.banalized ?? 0) <
+                MIN_REMOVED_CARD_COUNT ||
+                !clearBadCards)
             ) {
               setList.push(cardTremble);
             }
@@ -224,7 +232,9 @@ export class Card implements IDamageable {
 
             if (
               cardTauntDistortion.cost <= 6 &&
-              (deletedCards[card.name]?.banalized ?? 0) < MIN_REMOVED_CARD_COUNT
+              ((deletedCards[card.name]?.banalized ?? 0) <
+                MIN_REMOVED_CARD_COUNT ||
+                !clearBadCards)
             ) {
               setList.push(cardTauntDistortion);
             }
@@ -240,7 +250,9 @@ export class Card implements IDamageable {
 
             if (
               cardTauntTremble.cost <= 6 &&
-              (deletedCards[card.name]?.banalized ?? 0) < MIN_REMOVED_CARD_COUNT
+              ((deletedCards[card.name]?.banalized ?? 0) <
+                MIN_REMOVED_CARD_COUNT ||
+                !clearBadCards)
             ) {
               setList.push(cardTauntTremble);
             }
@@ -256,7 +268,9 @@ export class Card implements IDamageable {
 
             if (
               cardDistortionTremble.cost <= 6 &&
-              (deletedCards[card.name]?.banalized ?? 0) < MIN_REMOVED_CARD_COUNT
+              ((deletedCards[card.name]?.banalized ?? 0) <
+                MIN_REMOVED_CARD_COUNT ||
+                !clearBadCards)
             ) {
               setList.push(cardDistortionTremble);
             }
@@ -272,7 +286,9 @@ export class Card implements IDamageable {
 
             if (
               cardTauntDistortionTremble.cost <= 6 &&
-              (deletedCards[card.name]?.banalized ?? 0) < MIN_REMOVED_CARD_COUNT
+              ((deletedCards[card.name]?.banalized ?? 0) <
+                MIN_REMOVED_CARD_COUNT ||
+                !clearBadCards)
             ) {
               setList.push(cardTauntDistortionTremble);
             }

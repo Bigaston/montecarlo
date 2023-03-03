@@ -17,4 +17,4 @@ export const NB_EXEMPLARE_IN_DECK = 2;
 export const NB_PV = 30;
 export const NB_MANA = 0;
 
-export const MIN_REMOVED_CARD_COUNT = 1; //= 0.0025;
+export const MIN_REMOVED_CARD_COUNT = 0.0025;

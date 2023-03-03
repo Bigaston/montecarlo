@@ -45,8 +45,10 @@ async function startGeneration() {
   result.innerHTML = "";
   console.log("Start Generation");
 
-  if (!deckHasBeenImportedj1) j1.generateDeck();
+  if (!deckHasBeenImportedj1) j1.generateDeck(true);
   if (!deckHasBeenImportedj2) j2.generateDeck();
+
+  Card.allCards = Card.generateSetList();
 
   generatePlot(j1.deck, j2.deck, "First Deck");
 
@@ -192,7 +194,7 @@ async function startGeneration() {
   console.log(Card.nbParty);
   console.log(Card.getRemovedCardsSortBanalized());
   console.log(j1.exportDeck());
-  download("deck.json", j1.exportDeck());
+  download("deck_" + Date.now() + ".json", j1.exportDeck());
 
   setTimeout(takeScreenshot, 1000);
 }
@@ -282,11 +284,10 @@ function takeScreenshot() {
     (canvas) => {
       // document.body.appendChild(canvas);
       canvas.toBlob((blob) => {
-        console.log(blob);
         blobToDataURL(blob as Blob).then((dataUrl) => {
           var element = document.createElement("a");
           element.setAttribute("href", dataUrl);
-          element.setAttribute("download", Date.now() + ".png");
+          element.setAttribute("download", "graph_" + Date.now() + ".png");
 
           element.style.display = "none";
           document.body.appendChild(element);

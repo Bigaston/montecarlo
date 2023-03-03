@@ -30,7 +30,9 @@ export class Player implements IDamageable {
     return 0;
   }
 
-  public generateDeck() {
+  public generateDeck(removeBadCards: boolean = false) {
+    Card.allCards = Card.generateSetList(removeBadCards);
+
     this.deck = [];
     let stayCard = [...Card.allCards];
 
