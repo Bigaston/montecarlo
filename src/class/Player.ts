@@ -1,14 +1,15 @@
+import { NB_CARD_IN_DECK, NB_MANA, NB_PV } from "../Params";
 import { Card } from "./Card";
 import { IDamageable } from "./IDamageable";
 import { log } from "./Logger";
 
 export class Player implements IDamageable {
   public name: string;
-  public health: number = 20;
+  public health: number = NB_PV;
   public deck: Card[] = [];
   public hand: Card[] = [];
   public mana: number = 0;
-  public manaMax: number = 2;
+  public manaMax: number = NB_MANA;
 
   public playedCards: Card[] = [];
 
@@ -33,7 +34,7 @@ export class Player implements IDamageable {
     this.deck = [];
     let stayCard = [...Card.allCards];
 
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < NB_CARD_IN_DECK; i++) {
       let randomIndex = Math.floor(Math.random() * stayCard.length);
       this.deck.push(stayCard[randomIndex].copy());
       stayCard.splice(randomIndex, 1);
@@ -59,6 +60,9 @@ export class Player implements IDamageable {
       log(this.name + " pioche " + card.name);
 
       this.hand.push(card);
+    } else {
+      log(this.name + " ne peut plus piocher. Fatigue et mort");
+      this.health -= 999;
     }
   }
 

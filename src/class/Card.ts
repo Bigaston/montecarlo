@@ -3,6 +3,7 @@ import {
   HAS_DISTORTION,
   HAS_TAUNT,
   HAS_TREMPLE,
+  NB_EXEMPLARE_IN_DECK,
   TAUNT_COST,
   TREMBLE_COST,
 } from "../Params";
@@ -153,97 +154,99 @@ export class Card implements IDamageable {
 
     for (let att = 0; att <= 12; att++) {
       for (let def = 1; def <= 13; def++) {
-        let card = new Card(att, def);
+        for (let i = 0; i < NB_EXEMPLARE_IN_DECK; i++) {
+          let card = new Card(att, def);
 
-        if (card.cost <= 6) {
-          setList.push(card);
-        }
-
-        if (HAS_TAUNT) {
-          let cardTaunt = new Card(att, def, {
-            hasTaunt: true,
-            hasDistortion: false,
-            hasTremble: false,
-          });
-
-          if (cardTaunt.cost <= 6) {
-            setList.push(cardTaunt);
+          if (card.cost <= 6) {
+            setList.push(card);
           }
-        }
 
-        if (HAS_DISTORTION) {
-          let cardDistortion = new Card(att, def, {
-            hasTaunt: false,
-            hasDistortion: true,
-            hasTremble: false,
-          });
+          if (HAS_TAUNT) {
+            let cardTaunt = new Card(att, def, {
+              hasTaunt: true,
+              hasDistortion: false,
+              hasTremble: false,
+            });
 
-          if (cardDistortion.cost <= 6) {
-            setList.push(cardDistortion);
+            if (cardTaunt.cost <= 6) {
+              setList.push(cardTaunt);
+            }
           }
-        }
 
-        if (HAS_TREMPLE) {
-          let cardTremble = new Card(att, def, {
-            hasTaunt: false,
-            hasDistortion: false,
-            hasTremble: true,
-          });
+          if (HAS_DISTORTION) {
+            let cardDistortion = new Card(att, def, {
+              hasTaunt: false,
+              hasDistortion: true,
+              hasTremble: false,
+            });
 
-          if (cardTremble.cost <= 6) {
-            setList.push(cardTremble);
+            if (cardDistortion.cost <= 6) {
+              setList.push(cardDistortion);
+            }
           }
-        }
 
-        // Card with Taunt and Distortion
-        if (HAS_TAUNT && HAS_DISTORTION) {
-          let cardTauntDistortion = new Card(att, def, {
-            hasTaunt: true,
-            hasDistortion: true,
-            hasTremble: false,
-          });
+          if (HAS_TREMPLE) {
+            let cardTremble = new Card(att, def, {
+              hasTaunt: false,
+              hasDistortion: false,
+              hasTremble: true,
+            });
 
-          if (cardTauntDistortion.cost <= 6) {
-            setList.push(cardTauntDistortion);
+            if (cardTremble.cost <= 6) {
+              setList.push(cardTremble);
+            }
           }
-        }
 
-        // Card with Taunt and Tremble
-        if (HAS_TAUNT && HAS_TREMPLE) {
-          let cardTauntTremble = new Card(att, def, {
-            hasTaunt: true,
-            hasDistortion: false,
-            hasTremble: true,
-          });
+          // Card with Taunt and Distortion
+          if (HAS_TAUNT && HAS_DISTORTION) {
+            let cardTauntDistortion = new Card(att, def, {
+              hasTaunt: true,
+              hasDistortion: true,
+              hasTremble: false,
+            });
 
-          if (cardTauntTremble.cost <= 6) {
-            setList.push(cardTauntTremble);
+            if (cardTauntDistortion.cost <= 6) {
+              setList.push(cardTauntDistortion);
+            }
           }
-        }
 
-        // Card with Distortion and Tremble
-        if (HAS_DISTORTION && HAS_TREMPLE) {
-          let cardDistortionTremble = new Card(att, def, {
-            hasTaunt: false,
-            hasDistortion: true,
-            hasTremble: true,
-          });
+          // Card with Taunt and Tremble
+          if (HAS_TAUNT && HAS_TREMPLE) {
+            let cardTauntTremble = new Card(att, def, {
+              hasTaunt: true,
+              hasDistortion: false,
+              hasTremble: true,
+            });
 
-          if (cardDistortionTremble.cost <= 6) {
-            setList.push(cardDistortionTremble);
+            if (cardTauntTremble.cost <= 6) {
+              setList.push(cardTauntTremble);
+            }
           }
-        }
 
-        // Card with Taunt, Distortion and Tremble
-        if (HAS_TAUNT && HAS_DISTORTION && HAS_TREMPLE) {
-          let cardTauntDistortionTremble = new Card(att, def, {
-            hasTaunt: true,
-            hasDistortion: true,
-            hasTremble: true,
-          });
+          // Card with Distortion and Tremble
+          if (HAS_DISTORTION && HAS_TREMPLE) {
+            let cardDistortionTremble = new Card(att, def, {
+              hasTaunt: false,
+              hasDistortion: true,
+              hasTremble: true,
+            });
 
-          if (cardTauntDistortionTremble.cost <= 6) {
-            setList.push(cardTauntDistortionTremble);
+            if (cardDistortionTremble.cost <= 6) {
+              setList.push(cardDistortionTremble);
+            }
+          }
+
+          // Card with Taunt, Distortion and Tremble
+          if (HAS_TAUNT && HAS_DISTORTION && HAS_TREMPLE) {
+            let cardTauntDistortionTremble = new Card(att, def, {
+              hasTaunt: true,
+              hasDistortion: true,
+              hasTremble: true,
+            });
+
+            if (cardTauntDistortionTremble.cost <= 6) {
+              setList.push(cardTauntDistortionTremble);
+            }
           }
         }
       }

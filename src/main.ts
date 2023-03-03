@@ -105,8 +105,6 @@ async function startGeneration() {
     lastWinRates.push(lastWinRate);
   }
 
-  console.log(j1.deck);
-
   let div = document.getElementById("finalDeck") as HTMLDivElement;
   div.innerHTML = "";
 
@@ -117,11 +115,6 @@ async function startGeneration() {
     });
 
   generatePlot(j1.deck, j2.deck, "Final Deck");
-  console.log(nbTour);
-
-  let p = document.createElement("p");
-  p.innerHTML = "Winrate";
-  result.appendChild(p);
 
   let canvas = document.createElement("canvas");
   result.appendChild(canvas);
@@ -159,7 +152,30 @@ async function startGeneration() {
     },
   });
 
-  console.log(j1.exportDeck());
+  canvas = document.createElement("canvas");
+  result.appendChild(canvas);
+
+  new Chart(canvas, {
+    type: "line",
+    data: {
+      labels: nbTour.map((_w, i) => i),
+      datasets: [
+        {
+          label: "Nombre de tour/match",
+          data: nbTour,
+          pointStyle: false,
+        },
+      ],
+    },
+    options: {
+      plugins: {
+        title: {
+          display: true,
+          text: "Nb Tour Evolution",
+        },
+      },
+    },
+  });
 }
 
 document.getElementById("startGeneration")!.addEventListener("click", () => {
@@ -170,42 +186,35 @@ function generatePlot(deck1: Card[], deck2: Card[], title: string) {
   let can = document.createElement("canvas");
   result.appendChild(can);
 
-  let cardCountj1: { [key: string]: number } = {};
-  let cardCountj2: { [key: string]: number } = {};
+  let cost1 = deck1.map((c) => c.cost);
+  let cost2 = deck2.map((c) => c.cost);
 
-  deck1.forEach((card) => {
-    if (cardCountj1[card.cost + ""]) cardCountj1[card.cost + ""]++;
-    else cardCountj1[card.cost + ""] = 1;
-  });
+  const counts1: { [key: number]: number } = {};
+  const counts2: { [key: number]: number } = {};
 
-  deck2.forEach((card) => {
-    if (cardCountj2[card.cost + ""]) cardCountj2[card.cost + ""]++;
-    else cardCountj2[card.cost + ""] = 1;
-  });
-
-  const dataj1: { cost: number; count: number }[] = [];
-  const dataj2: { cost: number; count: number }[] = [];
-
-  for (let cost in cardCountj1) {
-    dataj1.push({ cost: parseInt(cost), count: cardCountj1[cost] });
+  for (const num of cost1) {
+    counts1[num] = counts1[num] ? counts1[num] + 1 : 1;
   }
 
-  for (let cost in cardCountj2) {
-    dataj2.push({ cost: parseInt(cost), count: cardCountj1[cost] });
+  for (const num of cost2) {
+    counts2[num] = counts2[num] ? counts2[num] + 1 : 1;
   }
+
+  console.log(counts1);
+  console.log(counts2);
 
   new Chart(can, {
     type: "bar",
     data: {
-      labels: [0, 1, 2, 3, 4, 5, 6],
+      labels: ["0", "1", "2", "3", "4", "5", "6"],
       datasets: [
         {
           label: "J1",
-          data: dataj1.map((row) => row.count),
+          data: counts1,
         },
         {
           label: "J2",
-          data: dataj2.map((row) => row.count),
+          data: counts2,
         },
       ],
     },
